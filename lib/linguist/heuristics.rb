@@ -28,6 +28,9 @@ module Linguist
         if languages.all? { |l| ["Common Lisp", "OpenCL"].include?(l) }
           disambiguate_cl(data, languages)
         end
+        if languages.all? ( |l| ["M", "Objective-C"].include?(l) }
+          disambiguate_m(data, languages)
+        end
       end
     end
 
@@ -41,6 +44,14 @@ module Linguist
       matches << Language["C++"] if data.include?("#include <cstdint>")
       matches
     end
+
+    def self.disambiguate_m(data, languages)
+      matches = []
+      matches << Language["Objective-C"] if data.include?("@interface")
+      matches << Language["M"] if data.include?("#include <cstdint>")
+      matches
+    end
+
 
     def self.disambiguate_pl(data, languages)
       matches = []
